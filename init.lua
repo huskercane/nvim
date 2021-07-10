@@ -19,9 +19,7 @@ paq {'jeetsukumaran/vim-markology'}
 paq {'tpope/vim-fugitive'}
 paq {'airblade/vim-gitgutter'}
 paq {'vim-scripts/LargeFile'}
--- paq {'joshdick/onedark.vim'}
 paq {'morhetz/gruvbox'}
--- paq {'tomasiser/vim-code-dark'}
 paq {'majutsushi/tagbar'}
 paq {'Yggdroot/indentLine'}
 paq {'martinda/Jenkinsfile-vim-syntax'}
@@ -31,6 +29,8 @@ paq {'vim-airline/vim-airline-themes'}
 paq {'kevinhwang91/nvim-bqf'}
 paq {'rhysd/git-messenger.vim'}
 
+-- paq {'joshdick/onedark.vim'}
+-- paq {'tomasiser/vim-code-dark'}
 require('lsp')    --- lua/lsp.lua
 
 -- Compe setup
