@@ -40,5 +40,6 @@ opt('w', 'relativenumber', true)                      -- Relative line numbers
 opt('w', 'wrap', false)   
 opt('o', 'gfn', 'Fantasque Sans Mono 12, Fira Code')
 -- Follwing does not work
+opt('o', 'background', 'dark')   
 vim.o.background = "dark"
 cmd("let g:airline_theme='gruvbox'")

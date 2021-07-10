@@ -1,5 +1,5 @@
 require('settings')    -- lua/settings.lua
-require('maps')    -- lua/settings.lua
+require('maps')    -- lua/maps.lua
 local cmd = vim.cmd
 
 cmd 'packadd paq-nvim'
@@ -35,102 +35,7 @@ paq {'vim-airline/vim-airline-themes'}
 paq {'kevinhwang91/nvim-bqf'}
 paq {'rhysd/git-messenger.vim'}
 
-local lsp = require 'lspconfig' 
-lsp.pyright.setup{}
-lsp.bashls.setup{}
-lsp.dockerls.setup{}
-lsp.jdtls.setup{
-  on_attach = on_attach,
-  flags = {
-      debounce_text_changes = 150,
-  }
-}
-lsp.solargraph.setup {}
-lsp.gopls.setup{
-	cmd = {"gopls", "serve"},
-    settings = {
-      gopls = {
-        analyses = {
-          unusedparams = true,
-        },
-        staticcheck = true,
-      },
-    },
-  on_attach = on_attach,
-  flags = {
-      debounce_text_changes = 150,
-  }
-}
-lsp.sqls.setup{
-    cmd = {"/home/rohits/work/projects/go/bin/sqls"},
-    settings = {
-    sqls = {
-      connections = {
-          -- {
-          -- driver = 'mysql',
-          -- dataSourceName = 'root:root@tcp(127.0.0.1:13306)/world',
-        -- },
-        -- {
-          -- driver = 'postgresql',
-          -- dataSourceName = 'host=127.0.0.1 port=15432 user=postgres password=mysecretpassword1234 dbname=dvdrental sslmode=disable',
-        -- },
-        {
-            driver = 'sqlite3',
-            dataSourceName = 'test.db',
-        },
-      },
-    },
-  },
-}
-lsp.jsonls.setup {
-    commands = {
-        Format = {
-            function()
-                vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
-            end
-        }
-    }
-}
-lsp.tsserver.setup{}
-local lsps = require 'lsp_signature'
-
-
--- make your Ctrl+x,Ctrl+o work, add this to your init.vim:
-vim.api.nvim_command('autocmd FileType go setlocal omnifunc=v:lua.vim.lsp.omnifunc')
-
--- fix import like goimport
-goimports = function(timeout_ms)
-    local context = { source = { organizeImports = true } }
-    vim.validate { context = { context, "t", true } }
-
-    local params = vim.lsp.util.make_range_params()
-    params.context = context
-
-    -- See the implementation of the textDocument/codeAction callback
-    -- (lua/vim/lsp/handler.lua) for how to do this properly.
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
-    if not result or next(result) == nil then return end
-    local actions = result[1].result
-    if not actions then return end
-    local action = actions[1]
-
-    -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
-    -- is a CodeAction, it can have either an edit, a command or both. Edits
-    -- should be executed first.
-    if action.edit or type(action.command) == "table" then
-      if action.edit then
-        vim.lsp.util.apply_workspace_edit(action.edit)
-      end
-      if type(action.command) == "table" then
-        vim.lsp.buf.execute_command(action.command)
-      end
-    else
-      vim.lsp.buf.execute_command(action)
-    end
-  end
-
-
-vim.api.nvim_command('autocmd BufWritePre *.go lua goimports(1000)')
+require('lsp')    -- lua/lsp.lua
 
 -- Compe setup
 local compe = require 'compe'
@@ -186,5 +91,3 @@ _G.s_tab_complete = function()
         return t "<S-Tab>"
     end
 end
-
-lsps.on_attach()
