@@ -7,7 +7,7 @@ local paq = require('paq-nvim').paq
 paq{'savq/paq-nvim', opt=true}
 
 paq {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
-paq {'nvim-treesitter/playground'}
+-- paq {'nvim-treesitter/playground'}
 
 paq {'neovim/nvim-lspconfig'}
 paq {'hrsh7th/nvim-compe'}
@@ -19,15 +19,11 @@ paq {'jeetsukumaran/vim-markology'}
 paq {'tpope/vim-fugitive'}
 paq {'airblade/vim-gitgutter'}
 paq {'vim-scripts/LargeFile'}
-paq {'joshdick/onedark.vim'}
+-- paq {'joshdick/onedark.vim'}
 paq {'morhetz/gruvbox'}
-paq {'tomasiser/vim-code-dark'}
+-- paq {'tomasiser/vim-code-dark'}
 paq {'majutsushi/tagbar'}
 paq {'Yggdroot/indentLine'}
-paq {'martinda/Jenkinsfile-vim-syntax'}
-paq {'tfnico/vim-gradle'}
-paq {'vim-airline/vim-airline'}
-paq {'vim-airline/vim-airline-themes'}
 paq {'martinda/Jenkinsfile-vim-syntax'}
 paq {'tfnico/vim-gradle'}
 paq {'vim-airline/vim-airline'}
@@ -35,7 +31,7 @@ paq {'vim-airline/vim-airline-themes'}
 paq {'kevinhwang91/nvim-bqf'}
 paq {'rhysd/git-messenger.vim'}
 
-require('lsp')    -- lua/lsp.lua
+require('lsp')    --- lua/lsp.lua
 
 -- Compe setup
 local compe = require 'compe'
