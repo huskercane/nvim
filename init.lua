@@ -87,3 +87,24 @@ _G.s_tab_complete = function()
         return t "<S-Tab>"
     end
 end
+
+local tag_file = function(ctag_dir)
+	tag_files = {}
+    local uv = require("luv")
+    local scan_dir = function(err, success)
+        -- check err
+        if err ~= nil then return end
+        while true do
+            -- if file then add to tags list
+            local name, type = uv.fs_scandir_next(success)
+            if  name == nil then
+                break
+            end
+            table.insert(tag_files, ctag_dir..'/'..name)
+        end
+    end
+
+    scan_dir(nil, uv.fs_scandir(ctag_dir))
+	vim.o.tags = table.concat(tag_files, ":")
+end
+tag_file('/Users/rohitsi/.ctags')
