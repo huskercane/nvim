@@ -88,7 +88,7 @@ _G.s_tab_complete = function()
     end
 end
 
-local tag_file = function(ctag_dir)
+local tag_file = function(ctag_dir, ending)
 	tag_files = {}
     local uv = require("luv")
     local scan_dir = function(err, success)
@@ -100,11 +100,13 @@ local tag_file = function(ctag_dir)
             if  name == nil then
                 break
             end
-            table.insert(tag_files, ctag_dir..'/'..name)
+            if name:sub(-#ending) == ending then
+                table.insert(tag_files, ctag_dir..'/'..name)
+	        end
         end
     end
 
     scan_dir(nil, uv.fs_scandir(ctag_dir))
 	vim.o.tags = table.concat(tag_files, ":")
 end
-tag_file('/Users/rohitsi/.ctags')
+tag_file('/home/rohits/.ctags.d', '.tags')
