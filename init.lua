@@ -100,7 +100,7 @@ local tag_file = function(ctag_dir, ending)
             if  name == nil then
                 break
             end
-            if name:sub(-#ending) == ending then
+            if type == 'file' and name:sub(-#ending) == ending then
                 table.insert(tag_files, ctag_dir..'/'..name)
 	        end
         end
