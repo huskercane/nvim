@@ -41,9 +41,24 @@ local check_back_space = function()
     end
 end
 
-local tag_file = function(ctag_dir)
+local tag_file = function(ctag_dir, ending)
 	tag_files = {}
     local uv = require("luv")
+    local x_ctag_dir = ctag_dir
+
+    if ending == nil then
+        ending = '.tags'
+    end
+
+    if x_ctag_dir == nil then
+        local temp_ctag_dir = uv.os_homedir()
+        if temp_ctag_dir == nil then
+            return
+        end
+       x_ctag_dir = temp_ctag_dir..'/'..'.ctags.d' 
+    end
+
+
     local scan_dir = function(err, success)
         -- check err
         if err ~= nil then return end
@@ -54,15 +69,15 @@ local tag_file = function(ctag_dir)
                 break
             end
             if type == 'file' and name:sub(-#ending) == ending then
-                table.insert(tag_files, ctag_dir..'/'..name)
+                table.insert(tag_files, x_ctag_dir..'/'..name)
 	        end
         end
     end
 
-    local x = uv.fs_scandir(ctag_dir)
+    local x = uv.fs_scandir(x_ctag_dir)
     if x ~= nil then
         scan_dir(nil, x)
 	    vim.o.tags = table.concat(tag_files, ",")
     end
 end
-tag_file('/home/rohits/.ctags.d', '.tags')
+tag_file()
