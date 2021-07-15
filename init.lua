@@ -3,34 +3,7 @@ require('maps')    -- lua/maps.lua
 local cmd = vim.cmd
 
 cmd 'packadd paq-nvim'
-local paq = require('paq-nvim').paq
-paq{'savq/paq-nvim', opt=true}
-
-paq {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
--- paq {'nvim-treesitter/playground'}
-
-paq {'neovim/nvim-lspconfig'}
-paq {'hrsh7th/nvim-compe'}
-paq {'nvim-lua/popup.nvim'}
-paq {'nvim-lua/plenary.nvim'}
-paq {'nvim-telescope/telescope.nvim'}
-paq {'ray-x/lsp_signature.nvim'}
-paq {'jeetsukumaran/vim-markology'}
-paq {'tpope/vim-fugitive'}
-paq {'airblade/vim-gitgutter'}
-paq {'vim-scripts/LargeFile'}
-paq {'morhetz/gruvbox'}
-paq {'majutsushi/tagbar'}
-paq {'Yggdroot/indentLine'}
-paq {'martinda/Jenkinsfile-vim-syntax'}
-paq {'tfnico/vim-gradle'}
-paq {'vim-airline/vim-airline'}
-paq {'vim-airline/vim-airline-themes'}
-paq {'kevinhwang91/nvim-bqf'}
-paq {'rhysd/git-messenger.vim'}
-
--- paq {'joshdick/onedark.vim'}
--- paq {'tomasiser/vim-code-dark'}
+require('plugins') -- plugins
 require('lsp')    --- lua/lsp.lua
 
 -- Compe setup
@@ -68,27 +41,7 @@ local check_back_space = function()
     end
 end
 
--- Use (s-)tab to:
---- move to prev/next item in completion menuone
---- jump to prev/next snippet's placeholder
-_G.tab_complete = function()
-    if vim.fn.pumvisible() == 1 then
-        return t "<C-n>"
-    elseif check_back_space() then
-        return t "<Tab>"
-    else
-        return vim.fn['compe#complete']()
-    end
-end
-_G.s_tab_complete = function()
-    if vim.fn.pumvisible() == 1 then
-        return t "<C-p>"
-    else
-        return t "<S-Tab>"
-    end
-end
-
-local tag_file = function(ctag_dir, ending)
+local tag_file = function(ctag_dir)
 	tag_files = {}
     local uv = require("luv")
     local scan_dir = function(err, success)
@@ -106,7 +59,10 @@ local tag_file = function(ctag_dir, ending)
         end
     end
 
-    scan_dir(nil, uv.fs_scandir(ctag_dir))
-	vim.o.tags = table.concat(tag_files, ":")
+    local x = uv.fs_scandir(ctag_dir)
+    if x ~= nil then
+        scan_dir(nil, x)
+	    vim.o.tags = table.concat(tag_files, ",")
+    end
 end
 tag_file('/home/rohits/.ctags.d', '.tags')
