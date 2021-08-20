@@ -28,9 +28,9 @@ compe.setup {
     };
 }
 
-local t = function(str)
-    return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
+-- local t = function(str)
+--     return vim.api.nvim_replace_termcodes(str, true, true, true)
+-- end
 
 local check_back_space = function()
     local col = vim.fn.col('.') - 1

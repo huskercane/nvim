@@ -23,6 +23,7 @@ paq {'vim-airline/vim-airline'}
 paq {'vim-airline/vim-airline-themes'}
 paq {'kevinhwang91/nvim-bqf'}
 paq {'rhysd/git-messenger.vim'}
+paq {'bfrg/vim-qf-diagnostics'}
 
 -- paq {'joshdick/onedark.vim'}
 -- paq {'tomasiser/vim-code-dark'}
