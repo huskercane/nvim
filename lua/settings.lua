@@ -38,8 +38,21 @@ opt('w', 'list', true)                                -- Show some invisible cha
 opt('w', 'number', true)                              -- Print line number
 opt('w', 'relativenumber', true)                      -- Relative line numbers
 opt('w', 'wrap', false)   
-opt('o', 'gfn', 'Fantasque Sans Mono 12, Fira Code')
--- Follwing does not work
-opt('o', 'background', 'dark')   
-vim.o.background = "dark"
-cmd("let g:airline_theme='gruvbox'")
+-- opt('o', 'gfn', 'Fantasque\ Sans\ Mono:h14')
+-- cmd("let g:airline_theme='gruvbox'")
+cmd("let g:git_messenger_include_diff='true'")
+
+
+-- litee config
+require('litee.lib').setup({
+    tree = {
+        icon_set = "codicons"
+    },
+    panel = {
+        orientation = "left",
+        panel_size = 30
+    }
+})
+require('litee.filetree').setup({})
+require('litee.symboltree').setup({})
+require('litee.calltree').setup({})

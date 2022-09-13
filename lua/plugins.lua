@@ -1,8 +1,9 @@
-local paq = require('paq-nvim').paq
+vim.cmd 'packadd paq-nvim'
+local paq = require('paq').paq
 paq{'savq/paq-nvim', opt=true}
 
 paq {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
--- paq {'nvim-treesitter/playground'}
+paq {'nvim-treesitter/playground'}
 
 paq {'neovim/nvim-lspconfig'}
 paq {'hrsh7th/nvim-compe'}
@@ -19,11 +20,19 @@ paq {'majutsushi/tagbar'}
 paq {'Yggdroot/indentLine'}
 paq {'martinda/Jenkinsfile-vim-syntax'}
 paq {'tfnico/vim-gradle'}
-paq {'vim-airline/vim-airline'}
-paq {'vim-airline/vim-airline-themes'}
 paq {'kevinhwang91/nvim-bqf'}
 paq {'rhysd/git-messenger.vim'}
-paq {'bfrg/vim-qf-diagnostics'}
+-- paq {'bfrg/vim-qf-diagnostics'}
+paq {'sk1418/qfgrep'}
+paq {'ldelossa/litee.nvim'}
+paq {'ldelossa/litee-calltree.nvim'}
+paq {'ldelossa/litee-symboltree.nvim'}
+paq {'ldelossa/litee-filetree.nvim'}
+paq {'ldelossa/litee-bookmarks.nvim'}
+paq {'kyazdani42/nvim-web-devicons'}
+paq {'glepnir/indent-guides.nvim'}
 
+-- paq {'vim-airline/vim-airline'}
+-- paq {'vim-airline/vim-airline-themes'}
 -- paq {'joshdick/onedark.vim'}
 -- paq {'tomasiser/vim-code-dark'}
