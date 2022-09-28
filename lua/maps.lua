@@ -54,4 +54,3 @@ map('n', '<leader>o', 'm`o<Esc>``')  -- Insert a newline in normal mode
 -- noremap <leader>cd :cd %:p:h<CR>
 map('', '<leader>cd', ':cd %:p:h<CR>')
 map('', '<leader>gm', 'git-messenger')
-

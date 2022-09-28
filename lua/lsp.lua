@@ -134,6 +134,8 @@ goimports = function(timeout_ms)
 end
 
 
-vim.api.nvim_command('autocmd BufWritePre *.go lua goimports(1000)')
+vim.api.nvim_command('autocmd BufWritePre *.js lua vim.lsp.buf.formatting_sync(nil, 100)')
+vim.api.nvim_command('autocmd BufWritePre *.jsx lua vim.lsp.buf.formatting_sync(nil, 100)')
+vim.api.nvim_command('autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 100)')
 -- make your Ctrl+x,Ctrl+o work, add this to your init.vim:
 vim.api.nvim_command('autocmd FileType go setlocal omnifunc=v:lua.vim.lsp.omnifunc')

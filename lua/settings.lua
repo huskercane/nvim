@@ -22,7 +22,8 @@ opt('b', 'shiftwidth', indent)                        -- Size of an indent
 opt('b', 'smartindent', true)                         -- Insert indents automatically
 opt('o', 'smarttab', true)                         -- Insert indents automatically
 opt('b', 'tabstop', indent)                           -- Number of spaces tabs count for
-opt('o', 'completeopt', 'menuone,noinsert,noselect')  -- Completion options (for deoplete)
+opt('o', 'completeopt', 'menuone,noselect')
+-- opt('o', 'completeopt', 'menuone,noinsert,noselect')  -- Completion options (for deoplete)
 opt('o', 'hidden', true)                              -- Enable modified buffers in background
 opt('o', 'ignorecase', true)                          -- Ignore case
 opt('o', 'joinspaces', false)                         -- No double spaces with join after a dot

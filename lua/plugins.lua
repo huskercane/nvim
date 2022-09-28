@@ -22,7 +22,6 @@ paq {'martinda/Jenkinsfile-vim-syntax'}
 paq {'tfnico/vim-gradle'}
 paq {'kevinhwang91/nvim-bqf'}
 paq {'rhysd/git-messenger.vim'}
--- paq {'bfrg/vim-qf-diagnostics'}
 paq {'sk1418/qfgrep'}
 paq {'ldelossa/litee.nvim'}
 paq {'ldelossa/litee-calltree.nvim'}
@@ -31,8 +30,6 @@ paq {'ldelossa/litee-filetree.nvim'}
 paq {'ldelossa/litee-bookmarks.nvim'}
 paq {'kyazdani42/nvim-web-devicons'}
 paq {'glepnir/indent-guides.nvim'}
-
--- paq {'vim-airline/vim-airline'}
--- paq {'vim-airline/vim-airline-themes'}
--- paq {'joshdick/onedark.vim'}
--- paq {'tomasiser/vim-code-dark'}
+paq {'fatih/vim-go'}
+paq {'SirVer/ultisnips'}
+paq {'honza/vim-snippets'}
