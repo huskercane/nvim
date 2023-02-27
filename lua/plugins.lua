@@ -33,3 +33,5 @@ paq {'glepnir/indent-guides.nvim'}
 paq {'fatih/vim-go'}
 paq {'SirVer/ultisnips'}
 paq {'honza/vim-snippets'}
+paq {'mfussenegger/nvim-dap'}
+paq {'mfussenegger/nvim-jdtls'}

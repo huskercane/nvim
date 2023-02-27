@@ -6,9 +6,7 @@ require 'lsp_signature'.on_attach()
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 on_attach = function(client, bufnr)
-    -- print( "XXXXXXXXXXXXXXXXXXXXXX")
     require 'lsp_signature'.on_attach()
-    -- print( "YYYYYYYYYYYY")
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
@@ -44,12 +42,12 @@ lsp.pyright.setup{
 }
 lsp.bashls.setup{}
 lsp.dockerls.setup{}
-lsp.jdtls.setup{
-    on_attach = on_attach,
-    flags = {
-        debounce_text_changes = 150,
-    }
-}
+-- lsp.jdtls.setup{
+--     on_attach = on_attach,
+--     flags = {
+--         debounce_text_changes = 150,
+--     }
+-- }
 lsp.solargraph.setup {
     on_attach = on_attach
 }
@@ -134,8 +132,84 @@ goimports = function(timeout_ms)
 end
 
 
-vim.api.nvim_command('autocmd BufWritePre *.js lua vim.lsp.buf.formatting_sync(nil, 100)')
-vim.api.nvim_command('autocmd BufWritePre *.jsx lua vim.lsp.buf.formatting_sync(nil, 100)')
-vim.api.nvim_command('autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 100)')
+-- vim.api.nvim_command('autocmd BufWritePre *.js lua vim.lsp.buf.formatting_sync(nil, 100)')
+-- vim.api.nvim_command('autocmd BufWritePre *.jsx lua vim.lsp.buf.formatting_sync(nil, 100)')
+-- vim.api.nvim_command('autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 100)')
 -- make your Ctrl+x,Ctrl+o work, add this to your init.vim:
 vim.api.nvim_command('autocmd FileType go setlocal omnifunc=v:lua.vim.lsp.omnifunc')
+
+
+local config = {
+    -- The command that starts the language server
+    -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
+    cmd = {
+        '/home/rohits/.sdkman/candidates/java/17.0.5-amzn/bin/java',
+        "--add-modules=ALL-SYSTEM",
+        "--add-opens",
+        "java.base/java.lang=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/java.time=ALL-UNNAMED",
+        "--add-opens",
+        "java.xml/jdk.xml.internal=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/sun.security.util=ALL-UNNAMED",
+        "--add-opens",
+        "ava.base/jdk.internal.util.random=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/java.util=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/java.security=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/java.io=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/java.nio.file=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/java.nio.charset=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/jdk.internal.access=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/java.net=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/sun.security.x509=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/java.util.stream=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/sun.nio.cs=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/java.util.concurrent=ALL-UNNAMED",
+        "--add-opens",
+        "java.logging/java.util.logging=ALL-UNNAMED",
+        "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+        "-Dosgi.bundles.defaultStartLevel=4",
+        "-Declipse.product=org.eclipse.jdt.ls.core.product",
+        "-Dfile.encoding=UTF-8",
+        "-DwatchParentProcess=true",
+        "-noverify",
+        "-Xmx1G",
+        "-XX:+UseG1GC",
+        "-XX:+UseStringDeduplication",
+        "-jar",
+        "/home/rohits/work/jdt-language-server-latest/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar",
+        "-configuration",
+        "/home/rohits/work/jdt-language-server-latest/config_linux",
+        "-data",
+        "/home/rohits/work/eclipse/workspaces/cgadmin-ws"
+    },
+
+    -- 💀
+    -- This is the default if not provided, you can remove it. Or adjust as needed.
+    -- One dedicated LSP server & client will be started per unique root_dir
+    root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
+
+    -- Here you can configure eclipse.jdt.ls specific settings
+    -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
+    -- for a list of options
+    settings = {
+        java = {
+        }
+    }
+}
+-- This starts a new client & server,
+-- or attaches to an existing client & server depending on the `root_dir`.
+-- require('jdtls').setup(config)
+-- require('jdtls').start_or_attach(config)
