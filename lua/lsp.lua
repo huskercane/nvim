@@ -48,9 +48,9 @@ lsp.dockerls.setup{}
 --         debounce_text_changes = 150,
 --     }
 -- }
-lsp.solargraph.setup {
-    on_attach = on_attach
-}
+-- lsp.solargraph.setup {
+--     on_attach = on_attach
+-- }
 lsp.gopls.setup{
     on_attach = on_attach,
     cmd = {"gopls", "serve"},
@@ -66,27 +66,6 @@ lsp.gopls.setup{
         debounce_text_changes = 150,
     }
 }
-lsp.sqls.setup{
-    cmd = {"/home/rohits/work/projects/go/bin/sqls"},
-    settings = {
-        sqls = {
-            connections = {
-                -- {
-                -- driver = 'mysql',
-                -- dataSourceName = 'root:root@tcp(127.0.0.1:13306)/world',
-                -- },
-                -- {
-                -- driver = 'postgresql',
-                -- dataSourceName = 'host=127.0.0.1 port=15432 user=postgres password=mysecretpassword1234 dbname=dvdrental sslmode=disable',
-                -- },
-                {
-                    driver = 'sqlite3',
-                    dataSourceName = 'test.db',
-                },
-            },
-        },
-    },
-}
 lsp.jsonls.setup {
     commands = {
         Format = {
@@ -96,7 +75,7 @@ lsp.jsonls.setup {
         }
     }
 }
-lsp.tsserver.setup{}
+-- lsp.tsserver.setup{}
 local lsps = require 'lsp_signature'
 
 
@@ -199,7 +178,7 @@ local config = {
     -- 💀
     -- This is the default if not provided, you can remove it. Or adjust as needed.
     -- One dedicated LSP server & client will be started per unique root_dir
-    root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
+    -- root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
 
     -- Here you can configure eclipse.jdt.ls specific settings
     -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
@@ -213,3 +192,61 @@ local config = {
 -- or attaches to an existing client & server depending on the `root_dir`.
 -- require('jdtls').setup(config)
 -- require('jdtls').start_or_attach(config)
+require('lspconfig').csharp_ls.setup{}
+-- Mason setup
+-- https://rsdlt.github.io/posts/rust-nvim-ide-guide-walkthrough-development-debug/
+require("mason").setup({
+    ui = {
+        icons = {
+            package_installed ="",
+            package_pending = "",
+            package_uninstalled = "",
+        },
+    }
+})
+require("mason-lspconfig").setup()
+local rt = require("rust-tools")
+
+rt.setup({
+  server = {
+    on_attach = function(_, bufnr)
+      -- Hover actions
+      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      -- Code action groups
+      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+    end,
+  },
+})
+
+-- LSP Diagnostics Options Setup 
+local sign = function(opts)
+  vim.fn.sign_define(opts.name, {
+    texthl = opts.name,
+    text = opts.text,
+    numhl = ''
+  })
+end
+
+sign({name = 'DiagnosticSignError', text = ''})
+sign({name = 'DiagnosticSignWarn', text = ''})
+sign({name = 'DiagnosticSignHint', text = ''})
+sign({name = 'DiagnosticSignInfo', text = ''})
+
+vim.diagnostic.config({
+    virtual_text = false,
+    signs = true,
+    update_in_insert = true,
+    underline = true,
+    severity_sort = false,
+    float = {
+        border = 'rounded',
+        source = 'always',
+        header = '',
+        prefix = '',
+    },
+})
+
+vim.cmd([[
+set signcolumn=yes
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+]])

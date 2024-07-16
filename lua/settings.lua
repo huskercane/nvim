@@ -15,14 +15,21 @@ u.create_augroup({
 }, 'qf')
 
 -------------------- OPTIONS -------------------------------
+--Set completeopt to have a better completion experience
+-- :help completeopt
+-- menuone: popup even when there's only one match
+-- noinsert: Do not insert text until a selection is made
+-- noselect: Do not select, force to select one from the menu
+-- shortness: avoid showing extra messages when using completion
+-- updatetime: set updatetime for CursorHold
 local indent = 4
-cmd 'colorscheme gruvbox'                              -- Put your favorite colorscheme here
+-- cmd 'colorscheme gruvbox'                              -- Put your favorite colorscheme here
 opt('b', 'expandtab', true)                           -- Use spaces instead of tabs
 opt('b', 'shiftwidth', indent)                        -- Size of an indent
 opt('b', 'smartindent', true)                         -- Insert indents automatically
 opt('o', 'smarttab', true)                         -- Insert indents automatically
 opt('b', 'tabstop', indent)                           -- Number of spaces tabs count for
-opt('o', 'completeopt', 'menuone,noselect')
+opt('o', 'completeopt', 'menuone,noselect,noinsert')
 -- opt('o', 'completeopt', 'menuone,noinsert,noselect')  -- Completion options (for deoplete)
 opt('o', 'hidden', true)                              -- Enable modified buffers in background
 opt('o', 'ignorecase', true)                          -- Ignore case
@@ -42,6 +49,18 @@ opt('w', 'wrap', false)
 -- opt('o', 'gfn', 'Fantasque\ Sans\ Mono:h14')
 -- cmd("let g:airline_theme='gruvbox'")
 cmd("let g:git_messenger_include_diff='true'")
+vim.opt.shortmess = vim.opt.shortmess + { c = true}
+vim.api.nvim_set_option('updatetime', 300)
+
+-- Fixed column for diagnostics to appear
+-- Show autodiagnostic popup on cursor hover_range
+-- Goto previous / next diagnostic warning / error 
+-- Show inlay_hints more frequently 
+vim.cmd([[
+set signcolumn=yes
+autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+]])
+
 
 
 -- litee config

@@ -29,9 +29,22 @@ paq {'ldelossa/litee-symboltree.nvim'}
 paq {'ldelossa/litee-filetree.nvim'}
 paq {'ldelossa/litee-bookmarks.nvim'}
 paq {'kyazdani42/nvim-web-devicons'}
-paq {'glepnir/indent-guides.nvim'}
+-- paq {'glepnir/indent-guides.nvim'}
+paq {'preservim/vim-indent-guides'}
 paq {'fatih/vim-go'}
 paq {'SirVer/ultisnips'}
 paq {'honza/vim-snippets'}
 paq {'mfussenegger/nvim-dap'}
-paq {'mfussenegger/nvim-jdtls'}
+paq {'williamboman/mason.nvim'}
+paq {'williamboman/mason-lspconfig.nvim'}
+paq {'simrat39/rust-tools.nvim'}
+paq {'hrsh7th/cmp-buffer'}
+paq {'hrsh7th/cmp-nvim-lsp'}
+paq {'hrsh7th/cmp-nvim-lsp-signature-help'}
+paq {'hrsh7th/cmp-nvim-lua'}
+paq {'hrsh7th/cmp-path'}
+paq {'hrsh7th/cmp-vsnip'}
+paq {'hrsh7th/nvim-cmp'}
+paq {'hrsh7th/vim-vsnip'}
+paq {'LunarVim/bigfile.nvim'}
+-- paq {'mfussenegger/nvim-jdtls'}
