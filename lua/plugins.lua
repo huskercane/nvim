@@ -23,20 +23,21 @@ paq {'tfnico/vim-gradle'}
 paq {'kevinhwang91/nvim-bqf'}
 paq {'rhysd/git-messenger.vim'}
 paq {'sk1418/qfgrep'}
-paq {'ldelossa/litee.nvim'}
-paq {'ldelossa/litee-calltree.nvim'}
-paq {'ldelossa/litee-symboltree.nvim'}
-paq {'ldelossa/litee-filetree.nvim'}
-paq {'ldelossa/litee-bookmarks.nvim'}
-paq {'kyazdani42/nvim-web-devicons'}
+-- paq {'ldelossa/litee.nvim'}
+-- paq {'ldelossa/litee-calltree.nvim'}
+-- paq {'ldelossa/litee-symboltree.nvim'}
+-- paq {'ldelossa/litee-filetree.nvim'}
+-- paq {'ldelossa/litee-bookmarks.nvim'}
+-- paq {'kyazdani42/nvim-web-devicons'}
 -- paq {'glepnir/indent-guides.nvim'}
 paq {'preservim/vim-indent-guides'}
-paq {'fatih/vim-go'}
-paq {'SirVer/ultisnips'}
+-- paq {'fatih/vim-go'}
+-- paq {'SirVer/ultisnips'}
 paq {'honza/vim-snippets'}
-paq {'mfussenegger/nvim-dap'}
-paq {'williamboman/mason.nvim'}
-paq {'williamboman/mason-lspconfig.nvim'}
+paq {'dcampos/nvim-snippy'}
+-- paq {'mfussenegger/nvim-dap'}
+-- paq {'williamboman/mason.nvim'}
+-- paq {'williamboman/mason-lspconfig.nvim'}
 paq {'simrat39/rust-tools.nvim'}
 paq {'hrsh7th/cmp-buffer'}
 paq {'hrsh7th/cmp-nvim-lsp'}

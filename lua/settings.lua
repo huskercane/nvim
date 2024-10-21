@@ -64,15 +64,15 @@ autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 
 
 -- litee config
-require('litee.lib').setup({
-    tree = {
-        icon_set = "codicons"
-    },
-    panel = {
-        orientation = "left",
-        panel_size = 30
-    }
-})
-require('litee.filetree').setup({})
-require('litee.symboltree').setup({})
-require('litee.calltree').setup({})
+-- require('litee.lib').setup({
+--     tree = {
+--         icon_set = "codicons"
+--     },
+--     panel = {
+--         orientation = "left",
+--         panel_size = 30
+--     }
+-- })
+-- require('litee.filetree').setup({})
+-- require('litee.symboltree').setup({})
+-- require('litee.calltree').setup({})
