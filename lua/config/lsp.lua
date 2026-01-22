@@ -1,10 +1,33 @@
--- config/lsp.lua — zero 'require("lspconfig")', fully compatible with 0.11+
+-- config/lsp.lua — Neovim 0.11+ native LSP API
 
--- Mason (optional but nice)
+-- Helper functions for conditional LSP loading
+local function is_python_project()
+  local cwd = vim.fn.getcwd()
+  return vim.fn.filereadable(cwd .. '/pyproject.toml') == 1
+    or vim.fn.filereadable(cwd .. '/setup.py') == 1
+    or vim.fn.filereadable(cwd .. '/requirements.txt') == 1
+    or vim.fn.glob(cwd .. '/*.py') ~= ''
+end
+
+local function is_docker_project()
+  local cwd = vim.fn.getcwd()
+  return vim.fn.filereadable(cwd .. '/Dockerfile') == 1
+    or vim.fn.filereadable(cwd .. '/docker-compose.yml') == 1
+    or vim.fn.filereadable(cwd .. '/docker-compose.yaml') == 1
+end
+
+local function is_java_project()
+  local cwd = vim.fn.getcwd()
+  return vim.fn.filereadable(cwd .. '/pom.xml') == 1
+    or vim.fn.filereadable(cwd .. '/build.gradle') == 1
+    or vim.fn.filereadable(cwd .. '/build.gradle.kts') == 1
+end
+
+-- Mason (optional)
 pcall(function()
   require("mason").setup()
   require("mason-lspconfig").setup({
-    ensure_installed = { "pyright", "bashls", "dockerls" },
+    ensure_installed = { "pyright", "ruff", "bashls", "dockerls" },
   })
 end)
 
@@ -17,7 +40,7 @@ pcall(function()
   capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 end)
 
--- on_attach
+-- on_attach keymaps
 local on_attach = function(_, bufnr)
   local map = function(m, lhs, rhs)
     vim.keymap.set(m, lhs, rhs, { noremap = true, silent = true, buffer = bufnr })
@@ -37,87 +60,72 @@ local on_attach = function(_, bufnr)
   map("n", "<space>f", function() vim.lsp.buf.format({ async = true }) end)
 end
 
--- Tiny root detector (no lspconfig.util)
-local function root_pattern(markers)
-  return function(startpath)
-    local found = vim.fs.find(markers, { upward = true, path = startpath })
-    if #found > 0 then
-      return vim.fs.dirname(found[1])
-    end
-    return vim.fn.getcwd()
-  end
+-- Build server list conditionally
+local servers = { "bashls" } -- bashls always enabled
+
+if is_python_project() then
+  table.insert(servers, "pyright")
+  table.insert(servers, "ruff")
 end
 
--- Server definitions WITHOUT lspconfig
-local servers = {
-  pyright = {
-    cmd = { "pyright-langserver", "--stdio" },
-    filetypes = { "python" },
-    root_dir = root_pattern({
-      "pyproject.toml", "setup.py", "setup.cfg",
-      "requirements.txt", "Pipfile", ".git",
-    }),
-    settings = {},
-  },
+if is_docker_project() then
+  table.insert(servers, "dockerls")
+end
 
-  bashls = {
-    cmd = { "bash-language-server", "start" },
-    filetypes = { "sh" }, -- keep to 'sh'; zsh often works but is unofficial
-    root_dir = root_pattern({ ".git", ".bashrc", ".bash_profile" }),
-    settings = {},
-  },
+if is_java_project() then
+  table.insert(servers, "jdtls")
+end
 
-  dockerls = {
-    cmd = { "docker-langserver", "--stdio" },
-    filetypes = { "dockerfile" },
-    root_dir = root_pattern({ "Dockerfile", ".git" }),
-    settings = {},
-  },
+-- Base config for all servers
+for _, server in ipairs(servers) do
+  vim.lsp.config[server] = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+  }
+end
 
-  -- NOTE: jdtls is special; usually managed by nvim-java.
-  -- If you really want to start it here, uncomment and ensure 'jdtls' is in PATH.
-  -- jdtls = {
-  --   cmd = { "jdtls" },
-  --   filetypes = { "java" },
-  --   root_dir = root_pattern({ "gradlew", "mvnw", ".git" }),
-  --   settings = {},
-  -- },
-}
+-- Pyright: disable organize imports (let ruff handle it)
+if is_python_project() then
+  vim.lsp.config.pyright = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      pyright = { disableOrganizeImports = true },
+      python = {
+        analysis = {
+          diagnosticSeverityOverrides = { reportUnusedImport = "none" },
+        },
+      },
+    },
+  }
 
--- Start each server on matching FileType
-for name, s in pairs(servers) do
-  local group = vim.api.nvim_create_augroup("lsp-auto-" .. name, { clear = true })
-  vim.api.nvim_create_autocmd("FileType", {
-    group = group,
-    pattern = s.filetypes or "*",
-    desc = "Start " .. name .. " via vim.lsp.start",
+  -- Ruff: minimal config
+  vim.lsp.config.ruff = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    init_options = { settings = {} },
+  }
+end
+
+-- Enable all servers
+vim.lsp.enable(servers)
+
+-- Disable ruff hover (let pyright handle it) - only for Python projects
+if is_python_project() then
+  vim.api.nvim_create_autocmd("LspAttach", {
+    group = vim.api.nvim_create_augroup("lsp_disable_ruff_hover", { clear = true }),
     callback = function(args)
-      local buf = args.buf
-      local bufname = vim.api.nvim_buf_get_name(buf)
-      if bufname == "" then return end
-
-      local root_dir = s.root_dir and s.root_dir(bufname) or vim.fn.getcwd()
-
-      -- Avoid duplicate clients for this buffer
-      local existing = vim.lsp.get_clients({ name = name, bufnr = buf })
-      if #existing > 0 then return end
-
-      vim.lsp.start({
-        name = name,
-        cmd = s.cmd,
-        cmd_env = s.cmd_env,
-        root_dir = root_dir,
-        settings = s.settings,
-        init_options = s.init_options,
-        single_file_support = s.single_file_support,
-        capabilities = capabilities,
-        on_attach = on_attach,
-        handlers = s.handlers,
-      })
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      if client and client.name == "ruff" then
+        client.server_capabilities.hoverProvider = false
+      end
     end,
+    desc = "Disable hover from Ruff",
   })
 end
 
--- If you use nvim-java, let it manage jdtls itself:
-pcall(function() require("java").setup({}) end)
+-- Java (nvim-java manages jdtls)
+if is_java_project() then
+  pcall(function() require("java").setup({}) end)
+end
 

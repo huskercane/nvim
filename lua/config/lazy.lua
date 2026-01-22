@@ -19,6 +19,26 @@ return {
   },
   { "lukas-reineke/indent-blankline.nvim" },
 
+  -- Large file handling
+  {
+    "LunarVim/bigfile.nvim",
+    config = function()
+      require("bigfile").setup({
+        filesize = 2, -- size in MB
+        features = {  -- features to disable
+          "indent_blankline",
+          "illuminate",
+          "lsp",
+          "treesitter",
+          "syntax",
+          "matchparen",
+          "vimopts",
+          "filetype",
+        },
+      })
+    end,
+  },
+
   -- Telescope
   { 
     "nvim-telescope/telescope.nvim",
@@ -51,36 +71,74 @@ return {
   "williamboman/mason.nvim",
   "williamboman/mason-lspconfig.nvim",
 
-  -- Git
-  "tpope/vim-fugitive",
-  "airblade/vim-gitgutter",
-  "rhysd/git-messenger.vim",
+  -- Git (only in git repos)
+  {
+    "tpope/vim-fugitive",
+    cond = function()
+      return vim.fn.isdirectory(vim.fn.getcwd() .. '/.git') == 1
+    end,
+  },
+  {
+    "airblade/vim-gitgutter",
+    cond = function()
+      return vim.fn.isdirectory(vim.fn.getcwd() .. '/.git') == 1
+    end,
+  },
+  {
+    "rhysd/git-messenger.vim",
+    cond = function()
+      return vim.fn.isdirectory(vim.fn.getcwd() .. '/.git') == 1
+    end,
+  },
 
-  -- Java
-  "nvim-java/nvim-java",
-  "JavaHello/spring-boot.nvim",
+  -- Java (only in Java projects)
+  {
+    "nvim-java/nvim-java",
+    cond = function()
+      return vim.fn.filereadable(vim.fn.getcwd() .. '/pom.xml') == 1
+        or vim.fn.filereadable(vim.fn.getcwd() .. '/build.gradle') == 1
+        or vim.fn.filereadable(vim.fn.getcwd() .. '/build.gradle.kts') == 1
+    end,
+  },
+  {
+    "JavaHello/spring-boot.nvim",
+    cond = function()
+      return vim.fn.filereadable(vim.fn.getcwd() .. '/pom.xml') == 1
+        or vim.fn.filereadable(vim.fn.getcwd() .. '/build.gradle') == 1
+        or vim.fn.filereadable(vim.fn.getcwd() .. '/build.gradle.kts') == 1
+    end,
+  },
 
   -- Debugging
   "mfussenegger/nvim-dap",
 
-  -- eslint
+  -- eslint (only in JS/TS projects)
   {
-      'esmullert/nvim-eslint',
-      config = function()
-          require('nvim-eslint').setup({})
-      end,
+    'esmuellert/nvim-eslint',
+    cond = function()
+      return vim.fn.filereadable(vim.fn.getcwd() .. '/package.json') == 1
+        or vim.fn.glob(vim.fn.getcwd() .. '/.eslintrc*') ~= ''
+    end,
+    config = function()
+      require('nvim-eslint').setup({})
+    end,
   },
-  -- npm
-  {
-      'maxolasersquad/npm-scripts.nvim',
-      cond = function()
-          return vim.fn.filereadable(vim.fn.getcwd() .. '/package.json') == 1
-      end,
-      config = function()
-          require('npm')
-          -- Optional: Add your key mapping here
-          vim.api.nvim_set_keymap('n', '<leader>npm', ':Npm', { noremap = true, silent = false })
-      end
-  },
+-- npm
+{
+    'maxolasersquad/npm-scripts.nvim',
+    cond = function()
+        return vim.fn.filereadable(vim.fn.getcwd() .. '/package.json') == 1
+    end,
+    config = function()
+        require('npm')
+        -- Optional: Add your key mapping here
+        vim.api.nvim_set_keymap('n',
+        '<leader>npm',
+        ':Npm ',
+        { noremap = true, silent = false }
+    )
+end
+}
+
 }
 
