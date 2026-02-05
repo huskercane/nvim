@@ -103,7 +103,8 @@ if is_python_project() then
   vim.lsp.config.ruff = {
     on_attach = on_attach,
     capabilities = capabilities,
-    init_options = { settings = {} },
+    -- If you want to pass Ruff settings, add:
+    -- init_options = { settings = { ... } },
   }
 end
 
@@ -128,4 +129,3 @@ end
 if is_java_project() then
   pcall(function() require("java").setup({}) end)
 end
-
