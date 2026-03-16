@@ -5,7 +5,7 @@ return {
     { "folke/lazy.nvim", version = "*" },
 
     -- Appearance
-    { 
+    {
         "ellisonleao/gruvbox.nvim",
         priority = 1000,
         config = function()
@@ -40,7 +40,7 @@ return {
     },
 
     -- Telescope
-    { 
+    {
         "nvim-telescope/telescope.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
         keys = {
@@ -55,8 +55,8 @@ return {
     },
 
     -- Treesitter
-    { 
-        "nvim-treesitter/nvim-treesitter", 
+    {
+        "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         config = function()
             require("nvim-treesitter.configs").setup({
@@ -90,6 +90,15 @@ return {
     "hrsh7th/cmp-path",
     "hrsh7th/vim-vsnip",
     "hrsh7th/cmp-vsnip",
+    "hrsh7th/cmp-cmdline",
+
+    -- Snippets: pre-built collection for many languages
+    {
+        "rafamadriz/friendly-snippets",
+        config = function()
+            -- vsnip auto-detects friendly-snippets if installed
+        end,
+    },
 
     -- LSP & Tools
     "neovim/nvim-lspconfig",
@@ -130,7 +139,7 @@ return {
         end,
         config = function()
             require('java').setup()
-            vim.lsp.enable('jdtls')
+            -- jdtls NOT auto-started; use <leader>lj to start on demand
         end,
     },
     {
@@ -211,4 +220,3 @@ return {
     },
 
 }
-

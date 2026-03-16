@@ -23,11 +23,42 @@ local function is_java_project()
     or vim.fn.filereadable(cwd .. '/build.gradle.kts') == 1
 end
 
+local function is_js_ts_project()
+  local cwd = vim.fn.getcwd()
+  return vim.fn.filereadable(cwd .. '/package.json') == 1
+    or vim.fn.filereadable(cwd .. '/tsconfig.json') == 1
+    or vim.fn.glob(cwd .. '/.eslintrc*') ~= ''
+end
+
+local function is_go_project()
+  local cwd = vim.fn.getcwd()
+  return vim.fn.filereadable(cwd .. '/go.mod') == 1
+    or vim.fn.glob(cwd .. '/*.go') ~= ''
+end
+
+local function is_rust_project()
+  local cwd = vim.fn.getcwd()
+  return vim.fn.filereadable(cwd .. '/Cargo.toml') == 1
+end
+
+local function is_ansible_project()
+  local cwd = vim.fn.getcwd()
+  return vim.fn.isdirectory(cwd .. '/roles') == 1
+    or vim.fn.isdirectory(cwd .. '/playbooks') == 1
+    or vim.fn.filereadable(cwd .. '/ansible.cfg') == 1
+    or vim.fn.glob(cwd .. '/*playbook*.yml') ~= ''
+    or vim.fn.glob(cwd .. '/*playbook*.yaml') ~= ''
+end
+
 -- Mason (optional)
 pcall(function()
   require("mason").setup()
   require("mason-lspconfig").setup({
-    ensure_installed = { "pyright", "ruff", "bashls", "dockerls" },
+    ensure_installed = {
+      "pyright", "ruff", "bashls", "dockerls",
+      "ts_ls", "gopls", "rust_analyzer", "lua_ls",
+      "ansiblels", "html", "cssls", "jsonls", "yamlls",
+    },
   })
 end)
 
@@ -72,9 +103,28 @@ if is_docker_project() then
   table.insert(servers, "dockerls")
 end
 
-if is_java_project() then
-  table.insert(servers, "jdtls")
+if is_js_ts_project() then
+  table.insert(servers, "ts_ls")
+  table.insert(servers, "cssls")
+  table.insert(servers, "html")
 end
+
+if is_go_project() then
+  table.insert(servers, "gopls")
+end
+
+if is_rust_project() then
+  table.insert(servers, "rust_analyzer")
+end
+
+if is_ansible_project() then
+  table.insert(servers, "ansiblels")
+end
+
+-- Always useful for config files
+table.insert(servers, "jsonls")
+table.insert(servers, "yamlls")
+table.insert(servers, "lua_ls")
 
 -- Base config for all servers
 for _, server in ipairs(servers) do
@@ -103,12 +153,23 @@ if is_python_project() then
   vim.lsp.config.ruff = {
     on_attach = on_attach,
     capabilities = capabilities,
-    -- If you want to pass Ruff settings, add:
-    -- init_options = { settings = { ... } },
   }
 end
 
--- Enable all servers
+-- lua_ls: suppress "undefined global vim" warning
+vim.lsp.config.lua_ls = {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    Lua = {
+      diagnostics = { globals = { "vim" } },
+      workspace = { checkThirdParty = false },
+      telemetry = { enable = false },
+    },
+  },
+}
+
+-- Enable all servers (jdtls excluded — start on demand with <leader>lj)
 vim.lsp.enable(servers)
 
 -- Disable ruff hover (let pyright handle it) - only for Python projects
@@ -125,7 +186,5 @@ if is_python_project() then
   })
 end
 
--- Java (nvim-java manages jdtls)
-if is_java_project() then
-  pcall(function() require("java").setup({}) end)
-end
+-- Java (nvim-java manages jdtls) — no longer auto-starts
+-- Use <leader>lj to start jdtls on demand

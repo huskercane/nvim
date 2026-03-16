@@ -6,6 +6,11 @@ if not ok then
 end
 
 cmp.setup {
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
   mapping = {
     ["<C-n>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
     ["<C-p>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
@@ -16,8 +21,10 @@ cmp.setup {
     ['<C-y>'] = cmp.mapping.confirm(),
   },
   sources = {
-    { name = 'buffer', keyword_length = 3 },  -- only start autocompleting after a few chars typed
-    { name = 'nvim_lsp', max_item_count = 10 },  -- don't overpopulate list with symbols from LSP
+    { name = 'nvim_lsp', max_item_count = 10 },
+    { name = 'vsnip' },
+    { name = 'path' },
+    { name = 'buffer', keyword_length = 3 },
   },
   -- Just for aesthetics
   window = {
@@ -25,3 +32,20 @@ cmp.setup {
     documentation = cmp.config.window.bordered(),
   },
 }
+
+-- `/` search completion
+cmp.setup.cmdline('/', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' },
+  },
+})
+
+-- `:` command line completion
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'path' },
+    { name = 'cmdline' },
+  },
+})
