@@ -55,7 +55,33 @@ return {
     },
 
     -- Treesitter
-    { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+    { 
+        "nvim-treesitter/nvim-treesitter", 
+        build = ":TSUpdate",
+        config = function()
+            require("nvim-treesitter.configs").setup({
+                -- Enable syntax highlighting
+                highlight = {
+                    enable = true,
+                    additional_vim_regex_highlighting = false,
+                },
+                -- Enable indentation
+                indent = {
+                    enable = true,
+                },
+                -- Enable incremental selection
+                incremental_selection = {
+                    enable = true,
+                    keymaps = {
+                        init_selection = "gnn",
+                        node_incremental = "grn",
+                        scope_incremental = "grc",
+                        node_decremental = "grm",
+                    },
+                },
+            })
+        end,
+    },
 
     -- Completion
     "hrsh7th/nvim-cmp",
@@ -94,10 +120,17 @@ return {
     -- Java (only in Java projects)
     {
         "nvim-java/nvim-java",
+        dependencies = {
+            "MunifTanjim/nui.nvim",
+        },
         cond = function()
             return vim.fn.filereadable(vim.fn.getcwd() .. '/pom.xml') == 1
             or vim.fn.filereadable(vim.fn.getcwd() .. '/build.gradle') == 1
             or vim.fn.filereadable(vim.fn.getcwd() .. '/build.gradle.kts') == 1
+        end,
+        config = function()
+            require('java').setup()
+            vim.lsp.enable('jdtls')
         end,
     },
     {

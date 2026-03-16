@@ -17,6 +17,7 @@ require("config.settings")
 require("config.keymaps")
 require("config.autocmds")
 require("lazy").setup("config.lazy")
+require("config.cmp")
 require("config.lsp")
 require("config.debug")
 
