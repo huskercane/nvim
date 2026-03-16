@@ -151,8 +151,13 @@ return {
         end,
     },
 
-    -- Debugging
-    "mfussenegger/nvim-dap",
+    -- Debugging (Go projects only)
+    {
+        "mfussenegger/nvim-dap",
+        cond = function()
+            return vim.fn.filereadable(vim.fn.getcwd() .. '/go.mod') == 1
+        end,
+    },
 
     -- eslint (only in JS/TS projects)
     {

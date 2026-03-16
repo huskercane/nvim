@@ -19,5 +19,7 @@ require("config.autocmds")
 require("lazy").setup("config.lazy")
 require("config.cmp")
 require("config.lsp")
-require("config.debug")
+if vim.fn.filereadable(vim.fn.getcwd() .. '/go.mod') == 1 then
+  require("config.debug")
+end
 
