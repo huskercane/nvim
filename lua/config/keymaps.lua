@@ -47,7 +47,10 @@ map("n", "<leader>gm", ":GitMessenger<CR>")
 
 -- Start jdtls on demand in Java projects
 map("n", "<leader>lj", function()
-  vim.lsp.enable("jdtls")
-  vim.cmd("LspStart jdtls")
-  print("jdtls starting...")
+  local ok, err = pcall(vim.lsp.enable, "jdtls")
+  if ok then
+    print("jdtls enabled")
+  else
+    vim.notify("Failed to enable jdtls: " .. tostring(err), vim.log.levels.ERROR)
+  end
 end, { desc = "Start Java LSP (jdtls)" })
