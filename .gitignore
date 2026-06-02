@@ -39,3 +39,6 @@ luac.out
 *.x86_64
 *.hex
 
+
+# Machine-specific overrides (see local.lua.example)
+lua/config/local.lua

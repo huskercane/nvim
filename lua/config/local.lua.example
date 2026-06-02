@@ -1,0 +1,30 @@
+-- config/local.lua  (machine-specific; gitignored)
+--
+-- Copy this file to lua/config/local.lua on any machine that needs to
+-- override the committed per-OS defaults in config/platform.lua. Everything
+-- here is optional — omit a key to keep the default.
+
+return {
+  -- Java / jdtls --------------------------------------------------------
+  -- Absolute path to a JDK home. Leave unset to use the OS default
+  -- (Windows has one baked in; Linux/macOS fall back to $JAVA_HOME, then to
+  -- `java` on PATH). Set to `false` to disable jdtls entirely on this box.
+  -- java_home = "/usr/lib/jvm/java-21-openjdk",
+
+  -- Execution environments jdtls advertises. Omit to let jdtls just use the
+  -- JVM it was launched with.
+  -- java_runtimes = {
+  --   { name = "JavaSE-21", path = "/usr/lib/jvm/java-21-openjdk", default = true },
+  --   { name = "JavaSE-11", path = "/usr/lib/jvm/java-11-openjdk" },
+  -- },
+
+  -- Tooling -------------------------------------------------------------
+  -- gradle_executable = "gradlew",
+
+  -- Per-machine opt-outs ------------------------------------------------
+  -- LSP servers to skip installing/enabling here (e.g. no Go toolchain):
+  -- disabled_servers = { "gopls", "rust_analyzer" },
+
+  -- Plugins to skip here (matched by the name you pass to platform.disabled):
+  -- disabled_plugins = {},
+}
