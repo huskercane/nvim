@@ -101,6 +101,7 @@ return {
                 -- Enable syntax highlighting
                 highlight = {
                     enable = true,
+                    disable = { "markdown" },
                     additional_vim_regex_highlighting = false,
                 },
                 -- Enable indentation
@@ -188,8 +189,16 @@ return {
             input = { enabled = true },
             picker = { enabled = true },
             notifier = { enabled = true },
-            quickfile = { enabled = true },
-            scope = { enabled = true },
+            quickfile = { enabled = true, exclude = { "markdown" } },
+            scope = {
+                enabled = true,
+                filter = function(buf)
+                    return vim.bo[buf].buftype == ""
+                        and vim.bo[buf].filetype ~= "markdown"
+                        and vim.b[buf].snacks_scope ~= false
+                        and vim.g.snacks_scope ~= false
+                end,
+            },
             scroll = { enabled = true },
             statuscolumn = { enabled = true },
             words = { enabled = true },
